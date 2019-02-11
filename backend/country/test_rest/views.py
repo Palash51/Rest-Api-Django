@@ -10,7 +10,8 @@ import re
 
 from country.response import api_response
 from rest_framework.views import APIView
-
+from test_rest.models import CountryDetail
+from test_rest.serializers import CountryDetailSerializer
 
 headers={"Access-Control-Allow-Credentials":"True"}
 content_type='application/json'
@@ -23,29 +24,20 @@ class CountryList(APIView):
 	@api_response
 	def get(self, request):
 		try:
-			url = "https://www.britannica.com/topic/list-of-countries-1993160"
-			response = requests.get(url)
-			soup = BeautifulSoup(response.text)
-			scripts = soup.find_all(attrs={'class': re.compile(r"^md-crosslink$")})
-			#print(scripts)
-
-
-			all_countries = []
-			for script in scripts:
-				content = script.get_text()
-				all_countries.append(content)
-				
-			data = []
-			for country in all_countries:
-				if country[0].isupper():
-					# print(country)
-					country_data = {
-						'name' : country
-					}
-					data.append(country_data)
+			
+			all_countries = CountryDetail.objects.all()
+			all_countries_serializer = CountryDetailSerializer(all_countries, many=True).data
+			# data = []
+			# for country in all_countries:
+			# 	if country[0].isupper():
+			# 		# print(country)
+			# 		country_data = {
+			# 			'name' : country
+			# 		}
+			# 		data.append(country_data)
 
 			
-			return {"status": 1, "data": data}
+			return {"status": 1, "data": all_countries_serializer}
 
 
 		except Exception:

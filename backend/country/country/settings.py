@@ -5,6 +5,7 @@ from decouple import config, Csv
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+FILES_DIR = os.path.abspath(os.path.join(BASE_DIR, './scripts/'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -57,7 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'test_rest',
     'rest_framework',
-    'sslserver'
+    'sslserver',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -68,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'country.urls'
@@ -102,7 +106,7 @@ DATABASES = {
         'HOST': config('POSTGRES_HOST'),
         'PASSWORD': config('POSTGRES_PASSWORD'),
         'PORT': config('POSTGRES_PORT'),
-    }
+    },
 }
 
 
