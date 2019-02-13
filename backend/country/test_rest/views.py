@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
+headers={"Access-Control-Allow-Credentials":"True"}
+content_type='application/json'
 
 
 import requests
@@ -10,11 +12,15 @@ import re
 
 from country.response import api_response
 from rest_framework.views import APIView
+from rest_framework import generics
 from test_rest.models import CountryDetail
 from test_rest.serializers import CountryDetailSerializer
 
-headers={"Access-Control-Allow-Credentials":"True"}
-content_type='application/json'
+
+
+from test_rest.wiki_scripts import get_country_details
+
+
 
 class CountryList(APIView):
 	"""
@@ -24,24 +30,43 @@ class CountryList(APIView):
 	@api_response
 	def get(self, request):
 		try:
-			
+			import pdb
+			pdb.set_trace()
 			all_countries = CountryDetail.objects.all()
 			all_countries_serializer = CountryDetailSerializer(all_countries, many=True).data
-			# data = []
-			# for country in all_countries:
-			# 	if country[0].isupper():
-			# 		# print(country)
-			# 		country_data = {
-			# 			'name' : country
-			# 		}
-			# 		data.append(country_data)
-
-			
 			return {"status": 1, "data": all_countries_serializer}
 
 
 		except Exception:
 			return {'status': 0, 'message': "No country is available!"}
+
+
+
+class CountryDetailView(generics.ListAPIView):
+	"""details of country"""
+
+	@api_response
+	def post(self, request):
+		"""get country name and fetch its details"""
+		country_name = request.data.get('country_name')
+		country_data = get_country_details(country_name)
+
+		if not country_data:
+			return {'status': 0, 'message': "Incorrect Country name"}
+
+		return {"status": 1, "data": country_data}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # count = 0

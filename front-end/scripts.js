@@ -17,20 +17,22 @@ app.appendChild(container);
 
 $.ajax({
         method: "GET",
-        url: 'https://5e00e51a.ngrok.io/contries/v1/',
+        url: 'https://69d501d5.ngrok.io/contries/v1/',
         // headers: {
         //     "Authorization": 'Token ' + localStorage.getItem('Token')
         // },
         contentType: 'application/json',
         // async: false,
         success: function (data) {
+            // console.log(data)
             cdata = data.data;
-            console.log(cdata)
+            // console.log(cdata)
             var countryName=document.getElementById('country')
             for(i=0;i<cdata.length;i++){
 
               console.log(cdata[i].name);
-              $('#country').append("<li>"+ cdata[i].name +"</li>");
+              var url="https://en.wikipedia.org/wiki/" + cdata[i].name
+              $('#country').append("<li><a href="+url+" target='_blank'>"+cdata[i].name+"</a></li>");
             }
             // remaining_percentage = data.data.remaining_percentage;
             // initializeDataTable(cdata);
@@ -42,7 +44,10 @@ $.ajax({
     });
 
 
-
+// $.ajax({
+//   method : "GET",
+//   url: ''
+// })
 
   // Begin accessing JSON data here
   // var data = JSON.parse(this.response);
