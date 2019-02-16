@@ -10,3 +10,11 @@ class CountryDetailSerializer(serializers.ModelSerializer):
 		model = CountryDetail
 		fields = ("name",)
 
+
+
+class CountryDataSerializer(serializers.ModelSerializer):
+	""" all the data of a country"""
+
+	class Meta:
+		model = CountryDetail
+		fields = "__all__"

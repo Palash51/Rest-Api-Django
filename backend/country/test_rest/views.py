@@ -1,25 +1,17 @@
-from django.shortcuts import render
-
-# Create your views here.
-headers={"Access-Control-Allow-Credentials":"True"}
-content_type='application/json'
-
-
 import requests
 from bs4 import BeautifulSoup
 import json
 import re
-
+from django.shortcuts import render
 from country.response import api_response
 from rest_framework.views import APIView
 from rest_framework import generics
 from test_rest.models import CountryDetail
-from test_rest.serializers import CountryDetailSerializer
-
-
-
+from test_rest.serializers import CountryDetailSerializer, CountryDataSerializer
 from test_rest.wiki_scripts import get_country_details
 
+headers={"Access-Control-Allow-Credentials":"True"}
+content_type='application/json'
 
 
 class CountryList(APIView):
@@ -30,8 +22,6 @@ class CountryList(APIView):
 	@api_response
 	def get(self, request):
 		try:
-			import pdb
-			pdb.set_trace()
 			all_countries = CountryDetail.objects.all()
 			all_countries_serializer = CountryDetailSerializer(all_countries, many=True).data
 			return {"status": 1, "data": all_countries_serializer}
@@ -43,21 +33,21 @@ class CountryList(APIView):
 
 
 class CountryDetailView(generics.ListAPIView):
-	"""details of country"""
+	"""details of a country"""
 
 	@api_response
 	def post(self, request):
 		"""get country name and fetch its details"""
 		country_name = request.data.get('country_name')
-		country_data = get_country_details(country_name)
+		# country_data = get_country_details(country_name)
 
+		country_data = CountryDetail.objects.get(name__icontains=country_name)
+		country_data_serializer = CountryDataSerializer(country_data).data
+		
 		if not country_data:
 			return {'status': 0, 'message': "Incorrect Country name"}
 
-		return {"status": 1, "data": country_data}
-
-
-
+		return {"status": 1, "data": country_data_serializer}
 
 
 

@@ -7,15 +7,13 @@ from urllib.request import urlopen
 
 import wikipedia
 from lxml import etree
-import urllib.request
 
 def get_country_details(country_name):
 	"""fetch countries data"""
-	if not re.match(r'^\w+$', country_name):
-		return False
-
+	# if not re.match(r'^\w+$', country_name):
+	# 	return False
 	new_url = "http://dbpedia.org/page/" + country_name.capitalize().replace(" ", "_")
-	
+
 	resp = urllib.request.urlopen(new_url)
 	soup = BeautifulSoup(resp, from_encoding=resp.info().get_param('charset'))
 
@@ -29,7 +27,7 @@ def get_country_details(country_name):
 			if 'capital' in tr.find_all('td')[0].text.strip("dbo:").strip("\n") and 'capital' not in result.keys():
 				result['capital'] =  tr.find_all('td')[1].text.strip("\n").lstrip("dbr:").replace("_", " ")
 
-			if 'largestCity' in tr.find_all('td')[0].text:
+			if  'largest city' not in result.keys() and 'largestCity' in tr.find_all('td')[0].text:
 				result['largest city'] =  tr.find_all('td')[1].text.strip("\n").lstrip("dbr:").replace("_", " ")
 
 			if 'currency' in tr.find_all('td')[0].text.strip("dbo:").strip("\n") and 'currency' not in result.keys():
