@@ -16,8 +16,6 @@ def main():
 	cdata = CountryDetail.objects.filter(population__isnull=False).values('name', 'population')
 	dfr = pd.concat([pd.Series(d) for d in cdata], axis=1).fillna(0).T
 
-	import pdb
-	pdb.set_trace()
 	# dfr.to_excel('data_analysis/captured_data/country_population.xlsx')
 	dfr.to_csv('data_analysis/captured_data/country_population.csv')
 	print(dfr)

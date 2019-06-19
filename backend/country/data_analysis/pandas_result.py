@@ -12,23 +12,22 @@ django.setup()
 
 from test_rest.models import CountryDetail
 
-def main():
+def countries_insights():
 	# dfr = pd.read_csv('data_analysis/captured_data/country_population.csv')
-	# # print(dfr)
 	# rows, columns = dfr.shape
-	# import pdb
-	# pdb.set_trace()
-
 	cdata = CountryDetail.objects.filter(population__isnull=False).values('name', 'population')
 	dfr = pd.concat([pd.Series(d) for d in cdata], axis=1).fillna(0).T
 
 	max_five_countries = dfr.sort_values('population', ascending = False)[:5]
-	
 	print(max_five_countries)
+
 	# print(rows, columns)
 
 
 
+def pandas_testing():
+	
 
-if __name__ == '__main__':
-	main()
+
+# if __name__ == '__main__':
+# 	main()

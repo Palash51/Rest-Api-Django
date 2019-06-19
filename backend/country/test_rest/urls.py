@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
+# from test_rest.views import CountryList, CountryDetailView
 from test_rest.views import CountryList, CountryDetailView
 
 app_name = 'test_rest'
