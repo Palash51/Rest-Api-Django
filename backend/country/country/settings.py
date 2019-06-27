@@ -147,6 +147,36 @@ REST_FRAMEWORK = {
 
 
 
+ELASTICSEARCH = {
+        "serviceProvider": "elasticsearch",
+        "host": "localhost",
+        "protocol": "http",
+        "port": 9200,
+        "log": ["error", "warning"],
+        "version": "7.0.0",
+        "refreshInterval": "2m",
+        "index" : "country",
+        "searchIndex": "search_active",
+        "portalIndex": "portal_active",
+        "requestTimeout": 60000,
+        "requestTimeoutSearch": 60000,
+        "requestTimeoutTimeWidget": 60000,
+        "requestTimeoutAutoSuggest": 5000,
+        "scrollTimeout": "2m"
+}
+
+
+KIBANA = {
+    "host": "localhost",
+    "port": 5601
+}
+
+
+
+
+
+
+
 
 
 # Internationalization

@@ -4,11 +4,14 @@ import json
 import re
 from django.shortcuts import render
 from country.response import api_response
+from elasticsearch import Elasticsearch
 from rest_framework.views import APIView
 from rest_framework import generics
 from test_rest.models import CountryDetail
 from test_rest.serializers import CountryDetailSerializer, CountryDataSerializer
 from test_rest.wiki_scripts import get_country_details
+
+from .helpers import ElasticSearchClient
 
 headers={"Access-Control-Allow-Credentials":"True"}
 content_type='application/json'
@@ -21,6 +24,7 @@ class CountryList(APIView):
 
 	@api_response
 	def get(self, request):
+		#http://127.0.0.1:8001/contries/v1/
 		try:
 			all_countries = CountryDetail.objects.all()
 			all_countries_serializer = CountryDetailSerializer(all_countries, many=True).data
@@ -48,6 +52,26 @@ class CountryDetailView(generics.ListAPIView):
 			return {'status': 0, 'message': "Incorrect Country name"}
 
 		return {"status": 1, "data": country_data_serializer}
+
+
+class SearchCountryES(APIView):
+    """Search country details using elastic search"""
+
+    @api_response
+    def post(self, request):
+        """"""
+        ES = ElasticSearchClient()
+        es_client = ES.client()
+        index_name = ES.get_index()
+        search_url = es_client[0].url + index_name +'*/_search'
+        check = requests.post(url=search_url, params=None, data=None)
+        print(check)
+        if check.status_code == 200:
+            return {"status": 1, "data": check._content}
+
+        return {'status': 0, 'message': "Error"}
+
+
 
 
 
