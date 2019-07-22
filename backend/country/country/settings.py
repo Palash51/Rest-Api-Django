@@ -110,6 +110,23 @@ DATABASES = {
 }
 
 
+# cache
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
+
+CACHE_TTL = 60 * 2
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -156,6 +173,7 @@ ELASTICSEARCH = {
         "version": "7.0.0",
         "refreshInterval": "2m",
         "index" : "country",
+        "new_index" : "all_countries",
         "searchIndex": "search_active",
         "portalIndex": "portal_active",
         "requestTimeout": 60000,
